@@ -1,9 +1,11 @@
+// app/page.tsx
+
 'use client';
 
 import React, { useState } from 'react';
 import MediaPlayer from './components/MediaPlayer';
 import Playlist from './components/Playlist';
-import SettingsModal from './components/SettingsModal';
+import SettingsModal from './components/SettingsModal'; // Ensure this import is correct
 
 interface MediaItem {
   url: string;

@@ -1,3 +1,5 @@
+// components/MediaPlayer.tsx
+
 import React, { useEffect, useRef } from 'react';
 
 interface MediaPlayerProps {
@@ -6,20 +8,33 @@ interface MediaPlayerProps {
   onTogglePlay: () => void;
   onRemove: () => void;
   onEnd: () => void;
+  playbackSpeed: number;  // New prop for playback speed
+  volume: number;         // New prop for volume
 }
 
-const MediaPlayer: React.FC<MediaPlayerProps> = ({ mediaSrc, isPlaying, onTogglePlay, onRemove, onEnd }) => {
+const MediaPlayer: React.FC<MediaPlayerProps> = ({
+  mediaSrc,
+  isPlaying,
+  onTogglePlay,
+  onRemove,
+  onEnd,
+  playbackSpeed,
+  volume,
+}) => {
   const mediaRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (mediaRef.current) {
+      mediaRef.current.playbackRate = playbackSpeed; // Set playback speed
+      mediaRef.current.volume = volume / 100;        // Set volume (0-1)
+      
       if (isPlaying) {
         mediaRef.current.play().catch((error) => console.error('Error playing video:', error));
       } else {
         mediaRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, playbackSpeed, volume]); // Update when playback speed or volume changes
 
   return (
     <div className="flex flex-col items-center space-y-4">
