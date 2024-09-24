@@ -1,101 +1,152 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useState } from 'react';
+import MediaPlayer from './components/MediaPlayer';
+import Playlist from './components/Playlist';
+import SettingsModal from './components/SettingsModal';
+
+interface MediaItem {
+  url: string;
+  name: string;
+}
+
+const IndexPage: React.FC = () => {
+  const [playlist, setPlaylist] = useState<MediaItem[]>([]);
+  const [currentMedia, setCurrentMedia] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [view, setView] = useState<'upload' | 'player' | 'playlist'>('upload');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState('dark');
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [volume, setVolume] = useState(100); // Volume as a percentage
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const mediaUrl = URL.createObjectURL(file);
+      const mediaName = file.name;
+      setPlaylist((prev) => [...prev, { url: mediaUrl, name: mediaName }]);
+      setView('playlist');
+    }
+  };
+
+  const playMedia = (mediaUrl: string) => {
+    setCurrentMedia(mediaUrl);
+    setIsPlaying(true);
+    setView('player');
+  };
+
+  const removeMedia = (mediaUrl: string) => {
+    const updatedPlaylist = playlist.filter((item) => item.url !== mediaUrl);
+    setPlaylist(updatedPlaylist);
+    
+    if (currentMedia === mediaUrl) {
+      setCurrentMedia(null);
+      setIsPlaying(false);
+      setView('playlist');
+    }
+  };
+
+  const togglePlayPause = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className={`min-h-screen ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'} text-white flex flex-col`}>
+      {/* Header */}
+      <header className="flex justify-between items-center p-4 bg-gray-900">
+        <div className="flex items-center">
+          <img src="/path/to/logo.png" alt="Logo" className="h-10 w-10 mr-2" />
+          <h1 className="text-2xl font-bold">PlayHive</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 px-4 rounded-lg"
+          onClick={() => setIsSettingsOpen(true)}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Settings
+        </button>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex flex-col items-center p-4 flex-grow">
+        {view === 'upload' && (
+          <>
+            <h2 className="text-4xl font-bold mb-6">Upload Your Media</h2>
+            <div className="mb-6">
+              <input
+                type="file"
+                accept="video/mp4,video/x-m4v,video/*,audio/*"
+                id="file-upload"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <label
+                htmlFor="file-upload"
+                className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg cursor-pointer"
+              >
+                Choose a File
+              </label>
+            </div>
+            <button
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 px-4 rounded"
+              onClick={() => setView('playlist')}
+            >
+              View Playlist
+            </button>
+          </>
+        )}
+
+        {view === 'player' && currentMedia && (
+          <>
+            <MediaPlayer
+              mediaSrc={currentMedia}
+              isPlaying={isPlaying}
+              onTogglePlay={togglePlayPause}
+              onRemove={() => removeMedia(currentMedia)}
+              onEnd={handleEnd}
+              playbackSpeed={playbackSpeed}
+              volume={volume}
+            />
+            <button
+              className="mt-6 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold py-2 px-4 rounded-lg"
+              onClick={() => setView('playlist')}
+            >
+              Back to Playlist
+            </button>
+          </>
+        )}
+
+        {view === 'playlist' && (
+          <>
+            <h2 className="text-3xl font-bold mb-6">Your Playlist</h2>
+            <Playlist playlist={playlist} onPlay={playMedia} onRemove={removeMedia} />
+            <button
+              className="mt-6 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold py-2 px-4 rounded-lg"
+              onClick={() => setView('upload')}
+            >
+              Upload More Media
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        currentTheme={currentTheme}
+        onThemeChange={setCurrentTheme}
+        playbackSpeed={playbackSpeed}
+        onPlaybackSpeedChange={setPlaybackSpeed}
+        volume={volume}
+        onVolumeChange={setVolume}
+      />
     </div>
   );
-}
+};
+
+export default IndexPage;
