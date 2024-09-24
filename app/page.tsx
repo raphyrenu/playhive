@@ -5,6 +5,8 @@
 import React, { useState } from 'react';
 import MediaPlayer from './components/MediaPlayer';
 import Playlist from './components/Playlist';
+import Image from 'next/image'; // Importing the Image component from next/image
+import logod from './logop.png'; // Ensure this import path is correct
 import SettingsModal from './components/SettingsModal'; // Ensure this import is correct
 
 interface MediaItem {
@@ -18,7 +20,7 @@ const IndexPage: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [view, setView] = useState<'upload' | 'player' | 'playlist'>('upload');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState('dark');
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('dark');
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [volume, setVolume] = useState(100); // Volume as a percentage
 
@@ -62,7 +64,7 @@ const IndexPage: React.FC = () => {
       {/* Header */}
       <header className="flex justify-between items-center p-4 bg-gray-900">
         <div className="flex items-center">
-          <img src="/path/to/logo.png" alt="Logo" className="h-10 w-10 mr-2" />
+          <Image src={logod} alt="Logo" className="h-10 w-10 mr-2" width={40} height={40} /> {/* Using the Image component */}
           <h1 className="text-2xl font-bold">PlayHive</h1>
         </div>
         <button
@@ -108,7 +110,7 @@ const IndexPage: React.FC = () => {
               mediaSrc={currentMedia}
               isPlaying={isPlaying}
               onTogglePlay={togglePlayPause}
-              onRemove={() => removeMedia(currentMedia)}
+              onRemove={() => removeMedia(currentMedia!)} // Use non-null assertion operator
               onEnd={handleEnd}
               playbackSpeed={playbackSpeed}
               volume={volume}

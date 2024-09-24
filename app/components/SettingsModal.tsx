@@ -1,19 +1,19 @@
 // components/SettingsModal.tsx
 
-import React, { useState } from 'react';
+import React from 'react';
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentTheme: string;
-  onThemeChange: (theme: string) => void;
+  currentTheme: 'light' | 'dark'; // Ensure the type is strictly 'light' | 'dark'
+  onThemeChange: (theme: 'light' | 'dark') => void; // Update here
   playbackSpeed: number;
   onPlaybackSpeedChange: (speed: number) => void;
   volume: number;
   onVolumeChange: (volume: number) => void;
 }
 
-const Settings: React.FC<SettingsModalProps> = ({
+const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,
   onClose,
   currentTheme,
@@ -29,13 +29,13 @@ const Settings: React.FC<SettingsModalProps> = ({
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
       <div className="bg-gray-800 text-white rounded-lg p-6 w-80">
         <h2 className="text-2xl font-bold mb-4">Settings</h2>
-        
+
         {/* Theme Selection */}
         <div className="mb-4">
           <label className="block mb-2">Theme:</label>
           <select
             value={currentTheme}
-            onChange={(e) => onThemeChange(e.target.value)}
+            onChange={(e) => onThemeChange(e.target.value as 'light' | 'dark')} // Ensure value is correctly typed
             className="w-full p-2 bg-gray-700 rounded"
           >
             <option value="dark">Dark</option>
@@ -71,6 +71,7 @@ const Settings: React.FC<SettingsModalProps> = ({
           />
         </div>
 
+        {/* Close Button */}
         <button
           className="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
           onClick={onClose}
@@ -82,4 +83,4 @@ const Settings: React.FC<SettingsModalProps> = ({
   );
 };
 
-export default Settings;
+export default SettingsModal;
