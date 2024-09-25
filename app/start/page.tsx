@@ -145,11 +145,12 @@ const IndexPage: React.FC = () => {
           <>
             <h2 className={`text-4xl font-bold mb-6 ${
         currentTheme === "dark" ? "text-white":"text-gray-900"}`}>Your Playlist</h2>
-            <Playlist
-              playlist={playlist}
-              onPlay={playMedia}
-              onRemove={removeMedia}
-            />
+           <Playlist
+  playlist={playlist}
+  onPlay={playMedia}
+  onRemove={removeMedia}
+  currentTheme={currentTheme} 
+/>
             <button
               className="mt-6 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold py-2 px-4 rounded-lg"
               onClick={() => setView("upload")}
