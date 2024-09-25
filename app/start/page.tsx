@@ -9,6 +9,7 @@ import Image from "next/image"; // Importing the Image component from next/image
 import logo from "../logo.png"; // Ensure this import path is correct
 import SettingsModal from "../components/SettingsModal"; // Ensure this import is correct
 import { FaTwitter, FaGithub, FaLinkedin } from 'react-icons/fa'; 
+
 import "../globals.css";
 
 interface MediaItem {
@@ -204,13 +205,13 @@ const IndexPage: React.FC = () => {
 
         {/* Social Media Icons */}
         <div className="flex space-x-4">
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800">
+          <a href="https://x.com/RAPHY15926" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800">
             <FaTwitter size={24} />
           </a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800">
+          <a href="https://github.com/raphyrenu/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800">
             <FaGithub size={24} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800">
+          <a href="https://www.linkedin.com/in/raphaelrenu/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800">
             <FaLinkedin size={24} />
           </a>
         </div>

@@ -1,13 +1,14 @@
-
 'use client';
 import React from 'react';
 import logo from './logo.png';
+
 import Image from "next/image";// Adjust the path as needed
 
 const LandingPage: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800 text-white">
-      {/* Header */}
+     
+      
       <header className="flex justify-between items-center p-6 bg-gray-900">
         <div className="flex items-center">
         <Image

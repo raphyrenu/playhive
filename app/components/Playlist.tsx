@@ -27,7 +27,7 @@ const Playlist: React.FC<PlaylistProps> = ({ playlist, onPlay, onRemove,currentT
         <ul className="list-disc">
           {playlist.map((item) => (
             <li key={item.url} className="flex justify-between items-center mb-2">
-              <span className={`font-bold mr-7 text-white ${
+              <span className={`font-bold mr-7 ${
           currentTheme === "dark" ? "text-white":"text-gray-900"}`}>{item.name}</span>
               <div>
                 <button
