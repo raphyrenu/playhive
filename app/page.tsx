@@ -1,156 +1,58 @@
-// app/page.tsx
 
 'use client';
+import React from 'react';
+import logo from './logo.png';
+import Image from "next/image";// Adjust the path as needed
 
-import React, { useState } from 'react';
-import MediaPlayer from './components/MediaPlayer';
-import Playlist from './components/Playlist';
-import Image from 'next/image'; // Importing the Image component from next/image
-import logod from './logop.png'; // Ensure this import path is correct
-import SettingsModal from './components/SettingsModal'; // Ensure this import is correct
-
-interface MediaItem {
-  url: string;
-  name: string;
-}
-
-const IndexPage: React.FC = () => {
-  const [playlist, setPlaylist] = useState<MediaItem[]>([]);
-  const [currentMedia, setCurrentMedia] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [view, setView] = useState<'upload' | 'player' | 'playlist'>('upload');
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('dark');
-  const [playbackSpeed, setPlaybackSpeed] = useState(1);
-  const [volume, setVolume] = useState(100); // Volume as a percentage
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const mediaUrl = URL.createObjectURL(file);
-      const mediaName = file.name;
-      setPlaylist((prev) => [...prev, { url: mediaUrl, name: mediaName }]);
-      setView('playlist');
-    }
-  };
-
-  const playMedia = (mediaUrl: string) => {
-    setCurrentMedia(mediaUrl);
-    setIsPlaying(true);
-    setView('player');
-  };
-
-  const removeMedia = (mediaUrl: string) => {
-    const updatedPlaylist = playlist.filter((item) => item.url !== mediaUrl);
-    setPlaylist(updatedPlaylist);
-    
-    if (currentMedia === mediaUrl) {
-      setCurrentMedia(null);
-      setIsPlaying(false);
-      setView('playlist');
-    }
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying((prev) => !prev);
-  };
-
-  const handleEnd = () => {
-    setIsPlaying(false);
-  };
-
+const LandingPage: React.FC = () => {
   return (
-    <div className={`min-h-screen ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'} text-white flex flex-col`}>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800 text-white">
       {/* Header */}
-      <header className="flex justify-between items-center p-4 bg-gray-900">
+      <header className="flex justify-between items-center p-6 bg-gray-900">
         <div className="flex items-center">
-          <Image src={logod} alt="Logo" className="h-10 w-10 mr-2" width={40} height={40} /> {/* Using the Image component */}
+        <Image
+            src={logo}
+            alt="Logo"
+            className="h-10 w-10 mr-2"
+            width={40}
+            height={40}
+          />
           <h1 className="text-2xl font-bold">PlayHive</h1>
         </div>
-        <button
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 px-4 rounded-lg"
-          onClick={() => setIsSettingsOpen(true)}
-        >
-          Settings
-        </button>
+       
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center p-4 flex-grow">
-        {view === 'upload' && (
-          <>
-            <h2 className="text-4xl font-bold mb-6">Upload Your Media</h2>
-            <div className="mb-6">
-              <input
-                type="file"
-                accept="video/mp4,video/x-m4v,video/*,audio/*"
-                id="file-upload"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-              <label
-                htmlFor="file-upload"
-                className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg cursor-pointer"
-              >
-                Choose a File
-              </label>
-            </div>
-            <button
-              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 px-4 rounded"
-              onClick={() => setView('playlist')}
-            >
-              View Playlist
-            </button>
-          </>
-        )}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          Welcome to PlayHive
+        </h2>
+        <p className="text-lg md:text-xl mb-8">
+          The ultimate media player for managing and enjoying your music and videos.
+          Upload, organize, and play your favorite media all in one place.
+        </p>
+        <div>
+          <button
+           
+            onClick={() => {}}
+          >
+            <a href="/start" className='bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg mr-4'>Start Now</a>
+          </button>
+          <button
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-6 rounded-lg"
+            onClick={() => {/* Link to other page or feature */}}
+          >
+            Learn More
+          </button>
+        </div>
+      </main>
 
-        {view === 'player' && currentMedia && (
-          <>
-            <MediaPlayer
-              mediaSrc={currentMedia}
-              isPlaying={isPlaying}
-              onTogglePlay={togglePlayPause}
-              onRemove={() => removeMedia(currentMedia!)} // Use non-null assertion operator
-              onEnd={handleEnd}
-              playbackSpeed={playbackSpeed}
-              volume={volume}
-            />
-            <button
-              className="mt-6 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold py-2 px-4 rounded-lg"
-              onClick={() => setView('playlist')}
-            >
-              Back to Playlist
-            </button>
-          </>
-        )}
-
-        {view === 'playlist' && (
-          <>
-            <h2 className="text-3xl font-bold mb-6">Your Playlist</h2>
-            <Playlist playlist={playlist} onPlay={playMedia} onRemove={removeMedia} />
-            <button
-              className="mt-6 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold py-2 px-4 rounded-lg"
-              onClick={() => setView('upload')}
-            >
-              Upload More Media
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* Settings Modal */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        currentTheme={currentTheme}
-        onThemeChange={setCurrentTheme}
-        playbackSpeed={playbackSpeed}
-        onPlaybackSpeedChange={setPlaybackSpeed}
-        volume={volume}
-        onVolumeChange={setVolume}
-      />
+      {/* Footer */}
+      <footer className="bg-gray-800 text-center py-4">
+        <p className="text-sm">&copy; 2024 PlayHive. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
 
-export default IndexPage;
+export default LandingPage;

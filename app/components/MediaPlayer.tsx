@@ -37,7 +37,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   }, [isPlaying, playbackSpeed, volume]); // Update when playback speed or volume changes
 
   return (
-    <div className="flex flex-col items-center space-y-4">
+    <div className="flex flex-col items-center justify-center h-full space-y-4 w-screen mt-52">
       <video
         ref={mediaRef}
         controls

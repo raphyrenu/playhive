@@ -1,27 +1,34 @@
-// components/Playlist.tsx
+"use client"
 import React from 'react';
+import { useState } from 'react';
+
+
 
 interface MediaItem {
   url: string;
   name: string;
+  
 }
 
 interface PlaylistProps {
   playlist: MediaItem[];
   onPlay: (url: string) => void;
   onRemove: (url: string) => void;
+  currentTheme: 'light' | 'dark';
 }
 
-const Playlist: React.FC<PlaylistProps> = ({ playlist, onPlay, onRemove }) => {
+const Playlist: React.FC<PlaylistProps> = ({ playlist, onPlay, onRemove,currentTheme }) => {
   return (
     <div>
       {playlist.length === 0 ? (
-        <p>No media in the playlist.</p>
+        <p className={`${
+          currentTheme === "dark" ? "text-white":"text-gray-900"}`}>No media in the playlist.</p>
       ) : (
         <ul className="list-disc">
           {playlist.map((item) => (
             <li key={item.url} className="flex justify-between items-center mb-2">
-              <span>{item.name}</span>
+              <span className={`font-bold mr-7 text-white ${
+          currentTheme === "dark" ? "text-white":"text-gray-900"}`}>{item.name}</span>
               <div>
                 <button
                   onClick={() => onPlay(item.url)}
@@ -31,7 +38,7 @@ const Playlist: React.FC<PlaylistProps> = ({ playlist, onPlay, onRemove }) => {
                 </button>
                 <button
                   onClick={() => onRemove(item.url)}
-                  className="bg-red-600 text-white font-bold py-1 px-3 rounded"
+                  className="ml-5 bg-red-600 text-white font-bold py-1 px-3 rounded"
                 >
                   Remove
                 </button>
